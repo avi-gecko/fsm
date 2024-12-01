@@ -7,8 +7,8 @@ import (
 )
 
 type FSM interface {
-	SetState(id uint64, state string)
-	GetState(id uint64) (string, error)
+	SetState(id uint64, state interface{})
+	GetState(id uint64) (interface{}, error)
 	ClearState(id uint64) error
 	saveState() error
 	dropState() error
@@ -23,24 +23,24 @@ const (
 func Create(backend BackendType) (FSM, error) {
 	switch backend {
 	case RAM:
-		return &FSMRAM{make(map[uint64]string), sync.Mutex{}}, nil
+		return &FSMRAM{make(map[uint64]interface{}), sync.Mutex{}}, nil
 	default:
 		return nil, errors.New("Backend type: " + fmt.Sprint(backend) + " doesn't exist")
 	}
 }
 
 type FSMRAM struct {
-	stateMap map[uint64]string
+	stateMap map[uint64]interface{}
 	mu       sync.Mutex
 }
 
-func (fsm *FSMRAM) SetState(id uint64, state string) {
+func (fsm *FSMRAM) SetState(id uint64, state interface{}) {
 	fsm.mu.Lock()
 	defer fsm.mu.Unlock()
 	fsm.stateMap[id] = state
 }
 
-func (fsm *FSMRAM) GetState(id uint64) (string, error) {
+func (fsm *FSMRAM) GetState(id uint64) (interface{}, error) {
 	fsm.mu.Lock()
 	defer fsm.mu.Unlock()
 	state, ok := fsm.stateMap[id]

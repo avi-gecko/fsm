@@ -97,3 +97,41 @@ func TestClearState(t *testing.T) {
 
 	t.Log(state)
 }
+
+func TestGetStateWithEnum(t *testing.T) {
+	fsm_test, err := fsm.Create(fsm.RAM)
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	type TestEnumState int
+	const (
+		TestEnum1 = iota
+		TestEnum2
+	)
+
+	set_func := func(fsm fsm.FSM, state TestEnumState, id uint64) {
+		fsm.SetState(id, state)
+	}
+	set_func(fsm_test, TestEnum1, 0)
+	set_func(fsm_test, TestEnum2, 1)
+
+	state0, err := fsm_test.GetState(0)
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	state1, err := fsm_test.GetState(1)
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	t.Log(state0)
+	t.Log(state1)
+}
