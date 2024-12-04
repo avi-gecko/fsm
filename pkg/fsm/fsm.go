@@ -14,14 +14,10 @@ type FSM interface {
 	dropState() error
 }
 
-type BackendType int
+type RAM struct{}
 
-const (
-	RAM = iota
-)
-
-func Create(backend BackendType) (FSM, error) {
-	switch backend {
+func Create(backend interface{}) (FSM, error) {
+	switch backend.(type) {
 	case RAM:
 		return &FSMRAM{make(map[uint64]interface{}), sync.Mutex{}}, nil
 	default:

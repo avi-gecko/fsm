@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateFSM(t *testing.T) {
-	fsm, err := fsm.Create(fsm.RAM)
+	fsm, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -18,7 +18,7 @@ func TestCreateFSM(t *testing.T) {
 }
 
 func TestGetState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM)
+	fsm_test, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -37,7 +37,7 @@ func TestGetState(t *testing.T) {
 }
 
 func TestGetFailedState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM)
+	fsm_test, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -55,7 +55,7 @@ func TestGetFailedState(t *testing.T) {
 }
 
 func TestGetFailedStateEmptyString(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM)
+	fsm_test, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -73,7 +73,7 @@ func TestGetFailedStateEmptyString(t *testing.T) {
 }
 
 func TestClearState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM)
+	fsm_test, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -99,7 +99,7 @@ func TestClearState(t *testing.T) {
 }
 
 func TestGetStateWithEnum(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM)
+	fsm_test, err := fsm.Create(fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
