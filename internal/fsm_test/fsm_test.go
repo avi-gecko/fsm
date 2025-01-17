@@ -6,8 +6,10 @@ import (
 	"github.com/avi-gecko/fsm/pkg/fsm"
 )
 
+type MockState interface {}
+
 func TestCreateFSM(t *testing.T) {
-	fsm, err := fsm.Create(fsm.RAM{})
+	fsm, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -18,7 +20,7 @@ func TestCreateFSM(t *testing.T) {
 }
 
 func TestGetState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM{})
+	fsm_test, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -37,7 +39,7 @@ func TestGetState(t *testing.T) {
 }
 
 func TestGetFailedState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM{})
+	fsm_test, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -55,7 +57,7 @@ func TestGetFailedState(t *testing.T) {
 }
 
 func TestGetFailedStateEmptyString(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM{})
+	fsm_test, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -73,7 +75,7 @@ func TestGetFailedStateEmptyString(t *testing.T) {
 }
 
 func TestClearState(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM{})
+	fsm_test, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -99,7 +101,7 @@ func TestClearState(t *testing.T) {
 }
 
 func TestGetStateWithEnum(t *testing.T) {
-	fsm_test, err := fsm.Create(fsm.RAM{})
+	fsm_test, err := fsm.Create[MockState](fsm.RAM{})
 
 	if err != nil {
 		t.Error(err)
@@ -112,7 +114,7 @@ func TestGetStateWithEnum(t *testing.T) {
 		TestEnum2
 	)
 
-	set_func := func(fsm fsm.FSM, state TestEnumState, id uint64) {
+	set_func := func(fsm fsm.FSM[MockState], state TestEnumState, id uint64) {
 		fsm.SetState(id, state)
 	}
 	set_func(fsm_test, TestEnum1, 0)

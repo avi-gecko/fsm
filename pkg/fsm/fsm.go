@@ -6,9 +6,9 @@ import (
 	"sync"
 )
 
-type FSM interface {
-	SetState(id uint64, state interface{})
-	GetState(id uint64) (interface{}, error)
+type FSM[StateType any] interface {
+	SetState(id uint64, state StateType)
+	GetState(id uint64) (StateType, error)
 	ClearState(id uint64) error
 	saveState() error
 	dropState() error
@@ -16,27 +16,27 @@ type FSM interface {
 
 type RAM struct{}
 
-func Create(backend interface{}) (FSM, error) {
+func Create[StateType any](backend interface{}) (FSM[StateType], error) {
 	switch backend.(type) {
 	case RAM:
-		return &FSMRAM{make(map[uint64]interface{}), sync.Mutex{}}, nil
+		return &fsmRAM[StateType]{make(map[uint64]StateType), sync.Mutex{}}, nil
 	default:
 		return nil, errors.New("Backend type: " + fmt.Sprint(backend) + " doesn't exist")
 	}
 }
 
-type FSMRAM struct {
-	stateMap map[uint64]interface{}
+type fsmRAM[StateType any] struct {
+	stateMap map[uint64]StateType
 	mu       sync.Mutex
 }
 
-func (fsm *FSMRAM) SetState(id uint64, state interface{}) {
+func (fsm *fsmRAM[StateType]) SetState(id uint64, state StateType) {
 	fsm.mu.Lock()
 	defer fsm.mu.Unlock()
 	fsm.stateMap[id] = state
 }
 
-func (fsm *FSMRAM) GetState(id uint64) (interface{}, error) {
+func (fsm *fsmRAM[StateType]) GetState(id uint64) (StateType, error) {
 	fsm.mu.Lock()
 	defer fsm.mu.Unlock()
 	state, ok := fsm.stateMap[id]
@@ -49,7 +49,7 @@ func (fsm *FSMRAM) GetState(id uint64) (interface{}, error) {
 	return state, err
 }
 
-func (fsm *FSMRAM) ClearState(id uint64) error {
+func (fsm *fsmRAM[StateType]) ClearState(id uint64) error {
 	fsm.mu.Lock()
 	defer fsm.mu.Unlock()
 	_, ok := fsm.stateMap[id]
@@ -64,12 +64,12 @@ func (fsm *FSMRAM) ClearState(id uint64) error {
 	return nil
 }
 
-func (fsm *FSMRAM) saveState() error {
+func (fsm *fsmRAM[StateType]) saveState() error {
 
 	return nil
 }
 
-func (fsm *FSMRAM) dropState() error {
+func (fsm *fsmRAM[StateType]) dropState() error {
 
 	return nil
 }
